@@ -514,7 +514,7 @@
     if (mode === 'world' && !busy && !player.moving) interact();
   }
   function pressB() {
-    if (!lightbox.hidden) { lightbox.hidden = true; return; }
+    if (!lightbox.hidden) return Viewer.close();
     if (mode === 'panel') return closePanel();
     if (dlg.active) return advanceDialogue();
     if (picker) { picker.idx = 4; renderMoves(); }
@@ -584,14 +584,8 @@
     const mv = e.target.closest('[data-move]');
     if (mv) return pick(Number(mv.dataset.move));
     const shot = e.target.closest('.shot');
-    if (shot) {
-      lightbox.querySelector('img').src = shot.dataset.full;
-      lightbox.querySelector('img').alt = shot.dataset.caption;
-      lightbox.querySelector('figcaption').textContent = shot.dataset.caption;
-      lightbox.hidden = false;
-      return;
-    }
-    if (e.target.closest('#lightbox')) { lightbox.hidden = true; return; }
+    if (shot) return Viewer.open(shot);
+    if (e.target.closest('#lightbox')) return Viewer.click(e);
     const pressed = e.target.closest('.console button');
     if (pressed) pressed.blur();
     if (e.target.closest('#panel-close') || e.target === panel) return closePanel();

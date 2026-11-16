@@ -14,6 +14,7 @@
   const points = (list) => '<ul class="points">' + (list || []).map((t) => `<li>${t}</li>`).join('') + '</ul>';
   const ext = (label, url) => `<a class="btn" href="${url}" target="_blank" rel="noopener">${label}</a>`;
   const joined = (...parts) => parts.filter(Boolean).join(' · ');
+  const attr = (t) => String(t || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
 
   /* A picture that is missing (or not added yet) shows the placeholder instead of a broken image. */
   document.addEventListener('error', (e) => {
@@ -126,11 +127,50 @@
     },
   };
 
+  /* The photo viewer: the picture on the left and, if the photo has a note,
+     its story typed out beside it like dialogue in a retro game. */
+  const Viewer = (function () {
+    let timer = null, full = '';
+    const box = () => document.getElementById('lightbox');
+    const note = () => box().querySelector('.viewer-note');
+    const stop = () => { clearInterval(timer); timer = null; };
+    return {
+      open(shot) {
+        const b = box(), d = shot.dataset;
+        stop();
+        b.querySelector('img').src = d.full;
+        b.querySelector('img').alt = d.caption || '';
+        b.querySelector('.viewer-place').textContent = d.place || '';
+        b.querySelector('h3').textContent = d.caption || '';
+        full = d.note || '';
+        note().textContent = '';
+        b.classList.toggle('has-note', !!full);
+        b.hidden = false;
+        if (!full) return;
+        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) { note().textContent = full; return; }
+        let i = 0;
+        timer = setInterval(() => {
+          i++;
+          note().textContent = full.slice(0, i);
+          if (i >= full.length) stop();
+        }, 26);
+      },
+      /* a click on the text finishes the typing; a click anywhere else closes the viewer */
+      click(e) {
+        if (timer && e.target.closest('aside')) { stop(); note().textContent = full; return; }
+        this.close();
+      },
+      close() { stop(); box().hidden = true; },
+    };
+  })();
+  window.Viewer = Viewer;
+
   window.Content = {
     DATA: Object.assign({}, P, { travel: SITE.travel }),
     SECTIONS,
     order: ['about', 'projects', 'experience', 'academy', 'hobbies', 'contact'],
     src,
+    attr,
     PLACEHOLDER,
   };
 })();
