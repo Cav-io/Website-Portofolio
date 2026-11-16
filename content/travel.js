@@ -1,6 +1,10 @@
 /* TRAVEL ALBUM: one block per country, each with its pin on the map and its photos.
    lon and lat place the pin (search "<city> coordinates" and use longitude, latitude).
-   Photos are file names from assets/photos/.                                       */
+
+   Each photo has:
+     file     a file name from assets/photos/
+     caption  the short line under the picture
+     note     (optional) the story shown beside the picture when it is clicked         */
 window.SITE = window.SITE || {};
 
 SITE.travel = [
@@ -42,10 +46,27 @@ SITE.travel = [
     home: true, // the pin the flight routes start from
     blurb: 'Home base. Lake District hikes and London sunsets.',
     photos: [
-      { file: 'lakes-crew.jpg', caption: 'Lake District with the crew' },
+      {
+        file: 'lakes-crew.jpg', caption: 'Lake District with the crew',
+        note: 'I love hiking. Trips like this are where I pick up new skills, and getting a whole group up a hill in the rain takes real teamwork and determination.',
+      },
       { file: 'lakes-view.jpg', caption: 'A rest above the lake' },
       { file: 'uk-deer.jpg', caption: 'A field, a deer and a sunset' },
       { file: 'greenwich.jpg', caption: 'London skyline from Greenwich' },
+    ],
+  },
+  {
+    place: 'Saudi Arabia', lon: 45, lat: 24,
+    blurb: 'Photos coming soon.',
+    photos: [
+      { file: 'saudi-1.jpg', caption: 'Photo coming soon' },
+    ],
+  },
+  {
+    place: 'Bangladesh', lon: 90.4, lat: 23.8,
+    blurb: 'Photos coming soon.',
+    photos: [
+      { file: 'bangladesh-1.jpg', caption: 'Photo coming soon' },
     ],
   },
 ];
