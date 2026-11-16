@@ -36,9 +36,13 @@
     }
   }, true);
 
+  /* One job or course. If it has a photo, hovering (or tapping) slides the picture out from the side. */
   function entry(e, sub) {
+    const pic = e.photo
+      ? `<figure class="entry-pic">${img(e.photo, e.photoCaption || e.place)}${e.photoCaption ? `<figcaption>${e.photoCaption}</figcaption>` : ''}</figure>`
+      : '';
     return `
-      <article class="entry">
+      <article class="entry${pic ? ' has-pic' : ''}"${pic ? ' tabindex="0"' : ''}>
         <div class="entry-body">
           <header>
             <h3>${e.place}</h3>
@@ -46,9 +50,17 @@
           </header>
           <p class="role">${joined(sub, e.where)}</p>
           ${points(e.points)}
+          ${pic ? '<span class="entry-hint">PHOTO ▸</span>' : ''}
         </div>
+        ${pic}
       </article>`;
   }
+
+  // tapping an entry keeps its photo open on touch screens
+  document.addEventListener('click', (e) => {
+    const card = e.target.closest('.entry.has-pic');
+    if (card && !e.target.closest('a')) card.classList.toggle('open');
+  });
 
   const SECTIONS = {
     about: {

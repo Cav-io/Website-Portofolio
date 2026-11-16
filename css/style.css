@@ -862,3 +862,49 @@ body[data-view='game'] { overflow: hidden; }
   #lightbox.has-note .viewer { grid-template-columns: 1fr; overflow-y: auto; }
   #lightbox.has-note .viewer img { max-height: 50dvh; }
 }
+
+/* ================= EXPERIENCE PHOTO DRAWER ================= */
+
+.entry.has-pic {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 0px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: grid-template-columns 0.28s steps(7);
+}
+.entry.has-pic:hover, .entry.has-pic:focus-visible, .entry.has-pic.open { grid-template-columns: minmax(0, 1fr) min(260px, 40%); outline: none; }
+.entry-body { position: relative; }
+.entry-hint {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  font-family: var(--pixel);
+  font-size: 8px;
+  padding: 6px 8px;
+  background: var(--yellow);
+  border-left: 3px solid var(--ink);
+  border-top: 3px solid var(--ink);
+}
+.entry.has-pic:hover .entry-hint, .entry.has-pic.open .entry-hint, .entry.has-pic:focus-visible .entry-hint { visibility: hidden; }
+.entry-pic { position: relative; margin: 0; min-width: 0; overflow: hidden; border-left: 3px solid var(--ink); background: var(--night); }
+.entry-pic img { width: 100%; height: 100%; min-height: 150px; object-fit: cover; }
+.entry-pic figcaption {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 6px 10px;
+  background: #23213dd9;
+  color: #fff;
+  font-size: 12.5px;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+@media (max-width: 640px) {
+  .entry.has-pic { grid-template-columns: 1fr; grid-template-rows: auto 0px; transition: grid-template-rows 0.28s steps(7); }
+  .entry.has-pic:hover, .entry.has-pic:focus-visible, .entry.has-pic.open { grid-template-columns: 1fr; grid-template-rows: auto 190px; }
+  .entry-pic { border-left: 0; border-top: 3px solid var(--ink); }
+}
+@media (prefers-reduced-motion: reduce) { .entry.has-pic { transition: none; } }
