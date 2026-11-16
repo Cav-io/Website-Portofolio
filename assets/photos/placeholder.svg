@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 80 60" shape-rendering="crispEdges">
+  <rect width="80" height="60" fill="#2b2d6e"/>
+  <g fill="#34378a">
+    <rect x="0" y="0" width="10" height="10"/><rect x="20" y="0" width="10" height="10"/><rect x="40" y="0" width="10" height="10"/><rect x="60" y="0" width="10" height="10"/>
+    <rect x="10" y="10" width="10" height="10"/><rect x="30" y="10" width="10" height="10"/><rect x="50" y="10" width="10" height="10"/><rect x="70" y="10" width="10" height="10"/>
+    <rect x="0" y="20" width="10" height="10"/><rect x="20" y="20" width="10" height="10"/><rect x="40" y="20" width="10" height="10"/><rect x="60" y="20" width="10" height="10"/>
+    <rect x="10" y="30" width="10" height="10"/><rect x="30" y="30" width="10" height="10"/><rect x="50" y="30" width="10" height="10"/><rect x="70" y="30" width="10" height="10"/>
+    <rect x="0" y="40" width="10" height="10"/><rect x="20" y="40" width="10" height="10"/><rect x="40" y="40" width="10" height="10"/><rect x="60" y="40" width="10" height="10"/>
+    <rect x="10" y="50" width="10" height="10"/><rect x="30" y="50" width="10" height="10"/><rect x="50" y="50" width="10" height="10"/><rect x="70" y="50" width="10" height="10"/>
+  </g>
+  <!-- a little pixel camera -->
+  <rect x="27" y="19" width="26" height="18" fill="#23213d"/>
+  <rect x="31" y="16" width="8" height="3" fill="#23213d"/>
+  <rect x="28" y="20" width="24" height="16" fill="#fff8e7"/>
+  <rect x="28" y="20" width="24" height="3" fill="#ffd23f"/>
+  <rect x="35" y="24" width="10" height="10" fill="#23213d"/>
+  <rect x="36" y="25" width="8" height="8" fill="#2ec4b6"/>
+  <rect x="37" y="26" width="3" height="3" fill="#fff8e7"/>
+  <rect x="47" y="24" width="3" height="2" fill="#ff5d73"/>
+  <text x="40" y="47" text-anchor="middle" font-family="'Courier New', monospace" font-weight="bold" font-size="5" fill="#ffd23f">PHOTO COMING SOON</text>
+</svg>
