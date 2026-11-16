@@ -131,12 +131,12 @@
       root.querySelector('.wmap-name').textContent = p.place.toUpperCase();
       root.querySelector('.wmap-count').textContent = p.photos.length + (p.photos.length === 1 ? ' photo' : ' photos');
       root.querySelector('.wmap-blurb').textContent = p.blurb || '';
-      root.querySelector('.gallery').innerHTML = p.photos.map(([f, c]) => `
+      root.querySelector('.gallery').innerHTML = p.photos.map((ph) => `
         <figure>
-          <button type="button" class="shot" data-full="assets/photos/${f}" data-caption="${c}">
-            <img src="assets/photos/${f}" alt="${c}" loading="lazy">
+          <button type="button" class="shot" data-full="${window.Content.src(ph.file)}" data-caption="${ph.caption || ''}">
+            <img src="${window.Content.src(ph.file)}" alt="${ph.caption || ''}" loading="lazy">
           </button>
-          <figcaption>${c}</figcaption>
+          <figcaption>${ph.caption || ''}</figcaption>
         </figure>`).join('');
     }
 
