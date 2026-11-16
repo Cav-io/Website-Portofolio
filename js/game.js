@@ -466,6 +466,10 @@
   function press(k) {
     if (k === 'a') return pressA();
     if (k === 'b') return pressB();
+    if (k === 'start') return pressA();
+    if (k === 'select') return $('#btn-sound').click();
+    if (k === 'x') { run = true; return; }
+    if (k === 'y') return $('#btn-help').click();
     if (picker && !dlg.active) {
       const i = picker.idx;
       if (k === 'left' && i % 2 === 1 && i < 4) picker.idx--;
@@ -479,6 +483,7 @@
     queued = k;
   }
   function release(k) {
+    if (k === 'x') run = false;
     const i = held.indexOf(k);
     if (i >= 0) held.splice(i, 1);
   }
@@ -498,6 +503,30 @@
     if (picker) { picker.idx = 4; renderMoves(); }
   }
 
+  function glow(k, on) {
+    document.querySelectorAll('.console [data-key="' + k + '"]').forEach((el) => el.classList.toggle('down', on));
+  }
+
+  /* the circle pad: drag it in a direction to walk */
+  (function () {
+    const stick = $('#stick'), knob = stick.querySelector('i');
+    let dir = null;
+    const set = (d, dx, dy) => {
+      if (d !== dir) { if (dir) release(dir); dir = d; if (d) press(d); }
+      knob.style.transform = d ? 'translate(' + dx * 22 + '%,' + dy * 22 + '%)' : '';
+    };
+    const move = (e) => {
+      const r = stick.getBoundingClientRect();
+      const dx = (e.clientX - r.left) / r.width - 0.5, dy = (e.clientY - r.top) / r.height - 0.5;
+      if (Math.hypot(dx, dy) < 0.12) return set(null, 0, 0);
+      if (Math.abs(dx) > Math.abs(dy)) set(dx > 0 ? 'right' : 'left', Math.sign(dx), 0);
+      else set(dy > 0 ? 'down' : 'up', 0, Math.sign(dy));
+    };
+    stick.addEventListener('pointerdown', (e) => { e.preventDefault(); stick.setPointerCapture(e.pointerId); move(e); });
+    stick.addEventListener('pointermove', (e) => { if (stick.hasPointerCapture(e.pointerId)) move(e); });
+    ['pointerup', 'pointercancel'].forEach((t) => stick.addEventListener(t, () => set(null, 0, 0)));
+  })();
+
   window.addEventListener('keydown', (e) => {
     if (document.body.dataset.view !== 'game') return;
     if (e.key === 'Shift') run = true;
@@ -511,16 +540,17 @@
     if (typing && (e.key === 'Enter' || e.key === ' ')) return; // a focused button handles its own click
     e.preventDefault();
     if (e.repeat) return;
+    glow(k, true);
     press(k);
   });
   window.addEventListener('keyup', (e) => {
     if (e.key === 'Shift') run = false;
     const k = KEYS[e.key];
-    if (k) release(k);
+    if (k) { glow(k, false); release(k); }
   });
   window.addEventListener('blur', () => { held.length = 0; run = false; });
 
-  document.querySelectorAll('#pad [data-key]').forEach((btn) => {
+  document.querySelectorAll('.console [data-key]').forEach((btn) => {
     const k = btn.dataset.key;
     const up = () => { btn.classList.remove('down'); release(k); };
     btn.addEventListener('pointerdown', (e) => { e.preventDefault(); btn.classList.add('down'); press(k); });
@@ -545,7 +575,7 @@
       return;
     }
     if (e.target.closest('#lightbox')) { lightbox.hidden = true; return; }
-    const pressed = e.target.closest('#bottom button');
+    const pressed = e.target.closest('.console button');
     if (pressed) pressed.blur();
     if (e.target.closest('#panel-close') || e.target === panel) return closePanel();
     const badge = e.target.closest('[data-badge]');
@@ -757,8 +787,8 @@
         'This whole town is about one person: CAVIO HOSSAIN, a Computer Science with AI student at the University of Nottingham.',
         'Every building holds part of the story. Visit them all to collect 8 badges.',
         touch
-          ? 'Use the D-PAD to move. Press A to talk and B to go back.'
-          : 'Move with the ARROW KEYS or WASD. Press Z to talk and X to go back. Hold SHIFT to run.',
+          ? 'Use the D-PAD or the CIRCLE PAD to move. Press A to talk and B to go back. Hold X to run.'
+          : 'Move with the ARROW KEYS or WASD. Press Z to talk and X to go back. Hold SHIFT to run. The buttons on the console work too.',
         'In a hurry? The CLASSIC VIEW button shows everything on one page.',
       ], 'LUMA');
       busy = false;

@@ -22,72 +22,94 @@
     </header>
 
     <div class="console">
-      <!-- top screen: the world -->
-      <section class="screen" id="top" aria-label="Game screen">
-        <canvas id="game" width="256" height="192"></canvas>
+      <!-- lid: the game screen -->
+      <div class="lid">
+        <div class="lid-inner">
+          <div class="grill" aria-hidden="true"></div>
+          <section class="screen" id="top" aria-label="Game screen">
+            <canvas id="game" width="256" height="192"></canvas>
 
-        <div id="title" class="layer">
-          <p class="title-small">A playable portfolio</p>
-          <h1>PORTFOLIO<br>TOWN</h1>
-          <p class="title-by">starring CAVIO HOSSAIN</p>
-          <p class="blink">PRESS START</p>
-        </div>
-
-        <div id="battle" class="layer" hidden>
-          <div class="foe-box"><span id="foe-name">BUG</span><div class="bar"><i id="foe-hp"></i></div></div>
-          <canvas id="foe" width="16" height="16"></canvas>
-          <canvas id="hero" width="16" height="16"></canvas>
-          <div class="hero-box"><span>CAVIO</span><div class="bar focus"><i id="hero-hp"></i></div><small>FOCUS</small></div>
-        </div>
-
-        <div id="hint" hidden></div>
-        <div id="dialog" hidden>
-          <span id="dialog-name" hidden></span>
-          <p id="dialog-text"></p>
-          <span class="next">▼</span>
-        </div>
-        <div id="flash"></div>
-        <div id="fade"></div>
-      </section>
-
-      <div class="hinge"></div>
-
-      <!-- bottom screen: menus and touch controls -->
-      <section class="screen" id="bottom" aria-label="Menu screen">
-        <div id="title-menu" class="pane">
-          <button type="button" class="big-btn go" id="btn-start">▶ Start the game</button>
-          <button type="button" class="big-btn" data-go="classic">Classic view (no game)</button>
-          <p class="tiny">Arrow keys or WASD to move · Z to talk · X to go back</p>
-        </div>
-
-        <div id="menu" class="pane" hidden>
-          <div class="menu-head"><span>BADGES</span><span id="badge-count">0/8</span></div>
-          <div id="badges"></div>
-          <p id="objective"></p>
-          <div class="menu-actions">
-            <button type="button" data-go="classic">Classic view</button>
-            <button type="button" id="btn-sound">Sound: on</button>
-            <button type="button" id="btn-help">Controls</button>
-          </div>
-          <div id="pad" aria-label="Touch controls">
-            <div class="dpad">
-              <button type="button" data-key="up" aria-label="Up">▲</button>
-              <button type="button" data-key="left" aria-label="Left">◀</button>
-              <button type="button" data-key="right" aria-label="Right">▶</button>
-              <button type="button" data-key="down" aria-label="Down">▼</button>
+            <div id="title" class="layer">
+              <p class="title-small">A playable portfolio</p>
+              <h1>PORTFOLIO<br>TOWN</h1>
+              <p class="title-by">starring CAVIO HOSSAIN</p>
+              <p class="blink">PRESS START</p>
             </div>
-            <div class="ab">
-              <button type="button" data-key="b" aria-label="B, go back">B</button>
-              <button type="button" data-key="a" aria-label="A, talk">A</button>
+
+            <div id="battle" class="layer" hidden>
+              <div class="foe-box"><span id="foe-name">BUG</span><div class="bar"><i id="foe-hp"></i></div></div>
+              <canvas id="foe" width="16" height="16"></canvas>
+              <canvas id="hero" width="16" height="16"></canvas>
+              <div class="hero-box"><span>CAVIO</span><div class="bar focus"><i id="hero-hp"></i></div><small>FOCUS</small></div>
             </div>
+
+            <div id="hint" hidden></div>
+            <div id="dialog" hidden>
+              <span id="dialog-name" hidden></span>
+              <p id="dialog-text"></p>
+              <span class="next">▼</span>
+            </div>
+            <div id="flash"></div>
+            <div id="fade"></div>
+          </section>
+          <div class="grill" aria-hidden="true"></div>
+        </div>
+      </div>
+
+      <div class="hinge" aria-hidden="true"><i></i></div>
+
+      <!-- base: menu screen with the controls either side -->
+      <div class="base">
+        <div class="ctl left" aria-label="Movement controls">
+          <div class="stick" id="stick" aria-hidden="true"><i></i></div>
+          <div class="dpad">
+            <button type="button" data-key="up" aria-label="Up">▲</button>
+            <button type="button" data-key="left" aria-label="Left">◀</button>
+            <span></span>
+            <button type="button" data-key="right" aria-label="Right">▶</button>
+            <button type="button" data-key="down" aria-label="Down">▼</button>
           </div>
         </div>
 
-        <div id="moves" class="pane" hidden>
-          <p class="moves-head">What will CAVIO do?</p>
-          <div id="move-list"></div>
+        <section class="screen" id="bottom" aria-label="Menu screen">
+          <div id="title-menu" class="pane">
+            <button type="button" class="big-btn go" id="btn-start">▶ Start the game</button>
+            <button type="button" class="big-btn" data-go="classic">Classic view (no game)</button>
+            <p class="tiny">Keyboard: arrows or WASD · Z talk · X back<br>or use the buttons on the console</p>
+          </div>
+
+          <div id="menu" class="pane" hidden>
+            <div class="menu-head"><span>BADGES</span><span id="badge-count">0/8</span></div>
+            <div id="badges"></div>
+            <p id="objective"></p>
+            <div class="menu-actions">
+              <button type="button" data-go="classic">Classic view</button>
+              <button type="button" id="btn-sound">Sound: on</button>
+              <button type="button" id="btn-help">Controls</button>
+            </div>
+          </div>
+
+          <div id="moves" class="pane" hidden>
+            <p class="moves-head">What will CAVIO do?</p>
+            <div id="move-list"></div>
+          </div>
+        </section>
+
+        <div class="ctl right" aria-label="Action buttons">
+          <div class="abxy">
+            <button type="button" data-key="x" aria-label="X, hold to run">X</button>
+            <button type="button" data-key="y" aria-label="Y, show controls">Y</button>
+            <button type="button" data-key="a" aria-label="A, talk and confirm">A</button>
+            <button type="button" data-key="b" aria-label="B, go back">B</button>
+          </div>
         </div>
-      </section>
+
+        <div class="sys">
+          <button type="button" data-key="select">SELECT</button>
+          <span class="led" aria-hidden="true"></span>
+          <button type="button" data-key="start">START</button>
+        </div>
+      </div>
     </div>
   </main>
 
