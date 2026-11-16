@@ -24,6 +24,14 @@ SITE.projects = [
     links: [],
   },
   {
+    name: 'Zombie Survival Game',
+    kind: 'University C++ module',
+    when: '',
+    stack: ['C++'],
+    text: 'A zombie survival mode game written in C++ for a university programming module.',
+    links: [],
+  },
+  {
     name: 'Red Wine Quality',
     kind: 'Machine learning coursework',
     when: 'Feb 2025 – Mar 2025',
