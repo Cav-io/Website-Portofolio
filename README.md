@@ -46,7 +46,9 @@ Then go to http://localhost:8000. Add `#classic` to the address to open the clas
 ```
 index.html        page structure for the game and the classic view
 css/style.css     all the styling
-js/content.js     the portfolio content (edit this to update the site)
+content/          the site's text and picture names, one small file per section
+                  (see content/HOW-TO-EDIT.md)
+js/render.js      turns the content files into the page sections
 js/art.js         pixel art: tiles, buildings, props, the tiny sign font
 js/shell.js       paints the console shell and the backdrop
 js/worldmap.js    the travel map
