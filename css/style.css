@@ -492,3 +492,88 @@ body[data-view='game'] { overflow: hidden; }
 @media (prefers-reduced-motion: reduce) {
   .blink, #dialog .next, #flash.on, .panel-card, .confetti { animation: none; }
 }
+
+/* ================= TRAVEL MAP ================= */
+
+.wmap-intro { margin: 0 0 12px; font-weight: 600; }
+.wmap-screen {
+  border: 4px solid var(--ink);
+  border-radius: 12px;
+  overflow: hidden;
+  background: #3f86dd;
+  box-shadow: 6px 6px 0 var(--pink);
+}
+.wmap-scroll { overflow-x: auto; }
+.wmap-stage { position: relative; min-width: 620px; }
+.wmap-stage canvas {
+  display: block;
+  width: 100%;
+  aspect-ratio: 240 / 92;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+.wmap-pin {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  margin: -8px 0 0 -8px;
+  padding: 0;
+  background: var(--coral);
+  border: 3px solid #fff;
+  box-shadow: 0 0 0 3px var(--ink);
+  animation: pin 1s steps(2) infinite;
+}
+.wmap-pin.home { background: var(--blue); }
+.wmap-pin span {
+  position: absolute;
+  left: 50%;
+  bottom: 22px;
+  transform: translateX(-50%);
+  background: var(--ink);
+  color: #fff;
+  font-family: var(--pixel);
+  font-size: 9px;
+  padding: 5px 7px;
+  border-radius: 5px;
+  white-space: nowrap;
+  display: none;
+  pointer-events: none;
+}
+.wmap-pin:hover, .wmap-pin:focus-visible, .wmap-pin.on { background: var(--yellow); outline: none; z-index: 2; }
+.wmap-pin.on { animation: none; transform: scale(1.25); }
+.wmap-pin.on span, .wmap-pin:hover span { display: block; }
+.wmap-pin.on::after {
+  content: '▼';
+  position: absolute;
+  left: 50%;
+  bottom: 40px;
+  transform: translateX(-50%);
+  color: var(--yellow);
+  font-size: 12px;
+  text-shadow: 0 2px 0 var(--ink);
+  animation: bob 0.6s steps(2) infinite;
+}
+@keyframes pin { 50% { box-shadow: 0 0 0 3px var(--ink), 0 0 0 7px #ffffff73; } }
+.wmap-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: var(--ink);
+  color: #fff;
+  font-family: var(--pixel);
+  font-size: 11px;
+}
+.wmap-name { color: var(--yellow); font-weight: 400; }
+.wmap-card { margin-top: 18px; }
+.wmap-blurb { margin: 0 0 14px; font-weight: 600; }
+
+/* soft vignette on the game screen */
+#top::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse at center, transparent 62%, #1b1c4e33 100%);
+}

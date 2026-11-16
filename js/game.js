@@ -2,7 +2,7 @@
 (function () {
   'use strict';
 
-  const TS = Art.TS, VW = 256, VH = 192, MW = 40, MH = 30;
+  const TS = Art.TS, CELL = Art.CELL, VW = 256, VH = 192, MW = 40, MH = 30;
   const $ = (s) => document.querySelector(s);
   const wait = (ms) => new Promise((res) => setTimeout(res, ms));
   const touch = window.matchMedia('(pointer: coarse)').matches;
@@ -20,7 +20,7 @@
 
   /* ---------- world ---------- */
 
-  const T = { GRASS: 0, FLOWER: 1, TALL: 2, PATH: 3, WATER: 4, TREE: 5, FENCE: 6, SIGN: 7 };
+  const T = { GRASS: 0, FLOWER: 1, TALL: 2, PATH: 3, WATER: 4, TREE: 5, FENCE: 6, SIGN: 7, LAMP: 8, BENCH: 9, MAIL: 10 };
   const map = new Uint8Array(MW * MH);
   const set = (x, y, t) => { map[y * MW + x] = t; };
   const get = (x, y) => (x < 0 || y < 0 || x >= MW || y >= MH ? T.TREE : map[y * MW + x]);
@@ -57,6 +57,7 @@
     ],
     '21,26': () => ['PORTFOLIO TOWN. Population: one developer.', 'Seven buildings, one meadow, eight badges.'],
     '28,19': () => ['BUG MEADOW', 'Wild bugs live in the tall grass. Walk in if you feel like debugging.'],
+    '10,21': () => ['A bright red mailbox.', 'Mail for CAVIO goes to ' + Content.DATA.email + '. The POST OFFICE has the rest.'],
   };
 
   function buildMap() {
@@ -77,24 +78,33 @@
     fill(29, 18, 8, 4, T.TALL);
     fill(29, 17, 9, 1, T.FENCE);
     Object.keys(SIGNS).forEach((k) => { const [x, y] = k.split(',').map(Number); set(x, y, T.SIGN); });
+    set(10, 21, T.MAIL);
+    [[18, 14], [21, 14], [18, 21], [21, 21], [16, 5], [23, 2]].forEach(([x, y]) => set(x, y, T.LAMP));
+    [[11, 17], [24, 17], [22, 6]].forEach(([x, y]) => set(x, y, T.BENCH));
   }
 
   const ground = [null, null];
+  let treeImg = null, lampImg = null;
   function renderGround() {
+    treeImg = Art.treeSprite();
+    lampImg = Art.lampSprite();
+    const edges = (x, y, t) => ({ u: get(x, y - 1) !== t, d: get(x, y + 1) !== t, l: get(x - 1, y) !== t, r: get(x + 1, y) !== t });
     for (let f = 0; f < 2; f++) {
       const c = Art.canvas(MW * TS, MH * TS), g = c.getContext('2d');
       for (let y = 0; y < MH; y++) {
         for (let x = 0; x < MW; x++) {
           const rnd = Art.rng(x * 73 + y * 151 + 5), px = x * TS, py = y * TS;
           switch (get(x, y)) {
-            case T.FLOWER: Art.flower(g, px, py, rnd); break;
+            case T.FLOWER: Art.flower(g, px, py, rnd, x, y); break;
             case T.TALL: Art.tall(g, px, py); break;
-            case T.PATH: Art.path(g, px, py, rnd); break;
-            case T.WATER: Art.water(g, px, py, f, get(x, y - 1) !== T.WATER); break;
-            case T.TREE: Art.tree(g, px, py, rnd); break;
-            case T.FENCE: Art.fence(g, px, py, rnd); break;
-            case T.SIGN: Art.sign(g, px, py, rnd); break;
-            default: Art.grass(g, px, py, rnd);
+            case T.PATH: Art.path(g, px, py, rnd, edges(x, y, T.PATH)); break;
+            case T.WATER: Art.water(g, px, py, f, edges(x, y, T.WATER), rnd); break;
+            case T.TREE: case T.LAMP: Art.grass(g, px, py, rnd, x, y); Art.shadow(g, px, py); break;
+            case T.FENCE: Art.fence(g, px, py, rnd, x, y); break;
+            case T.SIGN: Art.sign(g, px, py, rnd, x, y); break;
+            case T.BENCH: Art.bench(g, px, py, rnd, x, y); break;
+            case T.MAIL: Art.mailbox(g, px, py, rnd, x, y); break;
+            default: Art.grass(g, px, py, rnd, x, y);
           }
         }
       }
@@ -158,7 +168,7 @@
   const doorAt = (x, y) => BUILDINGS.find((b) => b.door.x === x && b.door.y === y);
   function solid(x, y) {
     const t = get(x, y);
-    return t === T.WATER || t === T.TREE || t === T.FENCE || t === T.SIGN || footprint[y * MW + x] === 1 || !!npcAt(x, y);
+    return t === T.WATER || t >= T.TREE || footprint[y * MW + x] === 1 || !!npcAt(x, y);
   }
 
   function setup() {
@@ -301,6 +311,7 @@
     openId = id;
     $('#panel-title').textContent = s.title;
     $('#panel-body').innerHTML = s.html();
+    $('#panel-body').querySelectorAll('[data-wmap]').forEach(WorldMap.mount);
     panel.hidden = false;
     $('#panel-body').scrollTop = 0;
     $('#panel-body').focus();
@@ -394,7 +405,7 @@
     foe.className = '';
     const hg = $('#hero').getContext('2d');
     hg.clearRect(0, 0, 16, 16);
-    hg.drawImage(player.sheet, 0, ROW.up * TS, TS, TS, 0, 0, TS, TS);
+    hg.drawImage(player.sheet, 1, ROW.up * CELL + 1, TS, TS, 0, 0, TS, TS);
     $('#foe-name').textContent = bug.name;
     $('#foe-hp').style.width = '100%';
     $('#hero-hp').style.width = '100%';
@@ -602,6 +613,17 @@
     }
     if (mode !== 'world') return;
 
+    if (!busy && !dlg.active) {
+      NPCS.forEach((n) => {
+        n.idle = (n.idle === undefined ? 2 + Math.random() * 5 : n.idle) - dt;
+        if (n.idle <= 0) {
+          n.idle = 2.5 + Math.random() * 5;
+          const options = ['down', 'down', 'left', 'right'];
+          n.dir = options[(Math.random() * options.length) | 0];
+        }
+      });
+    }
+
     if (player.moving) {
       player.t += dt * (run ? 9 : 5.5);
       if (player.t >= 1) {
@@ -631,14 +653,18 @@
   /* ---------- drawing ---------- */
 
   let clock = 0;
+  const clouds = [0, 1, 2, 3].map((i) => ({ x: i * 190 + 40, y: 60 + ((i * 137) % 360), w: 70 + ((i * 53) % 50), v: 5 + i * 1.5 }));
+  const flies = [0, 1, 2, 3, 4].map((i) => ({ x: 80 + i * 110, y: 100 + ((i * 97) % 300), p: i * 1.7, c: ['#ffd23f', '#ffffff', '#f15bb5', '#8fd0ff', '#ff9f1c'][i] }));
+
   function drawChar(sheet, dir, frame, sx, sy) {
-    ctx.fillStyle = 'rgba(0,0,0,.22)';
+    ctx.fillStyle = 'rgba(20,40,30,.3)';
     ctx.fillRect(sx + 3, sy + 13, 10, 3);
     ctx.fillRect(sx + 4, sy + 12, 8, 1);
-    ctx.drawImage(sheet, frame * TS, ROW[dir] * TS, TS, TS, sx, sy - 3, TS, TS);
+    ctx.fillRect(sx + 4, sy + 16, 8, 1);
+    ctx.drawImage(sheet, frame * CELL, ROW[dir] * CELL, CELL, CELL, sx - 1, sy - 4, CELL, CELL);
   }
 
-  function draw() {
+  function draw(dt) {
     let px = (player.fx + (player.x - player.fx) * player.t) * TS;
     let py = (player.fy + (player.y - player.fy) * player.t) * TS;
     let camX, camY;
@@ -654,17 +680,52 @@
 
     ctx.drawImage(ground[(clock * 2) & 1], -camX, -camY);
 
+    // everything that stands up is sorted by its feet so things overlap correctly
     const list = NPCS.map((n) => ({ sheet: n.sheet, dir: n.dir, frame: 0, x: n.x * TS, y: n.y * TS, tx: n.x, ty: n.y }));
     if (mode !== 'title') {
       const frame = player.moving ? [1, 0, 2, 0][(player.step * 2 + (player.t > 0.5 ? 1 : 0)) % 4] : 0;
       list.push({ sheet: player.sheet, dir: player.dir, frame, x: px, y: py, tx: Math.round(px / TS), ty: Math.round(py / TS) });
     }
-    list.sort((a, b) => a.y - b.y);
+    const x0 = Math.floor(camX / TS), y0 = Math.floor(camY / TS);
+    for (let ty = y0; ty <= y0 + 13; ty++) {
+      for (let tx = x0; tx <= x0 + 16; tx++) {
+        if (tx < 0 || ty < 0 || tx >= MW || ty >= MH) continue;
+        const t = get(tx, ty);
+        if (t === T.TREE) list.push({ img: treeImg, x: tx * TS, y: ty * TS, up: 4 });
+        else if (t === T.LAMP) list.push({ img: lampImg, x: tx * TS, y: ty * TS, up: 10 });
+      }
+    }
+    list.sort((a, b) => a.y - b.y || (a.img ? 1 : -1));
     list.forEach((e) => {
       const sx = Math.round(e.x) - camX, sy = Math.round(e.y) - camY;
-      if (sx < -TS || sy < -TS || sx > VW || sy > VH) return;
+      if (e.img) { ctx.drawImage(e.img, sx, sy - e.up); return; }
       drawChar(e.sheet, e.dir, e.frame, sx, sy);
       if (get(e.tx, e.ty) === T.TALL) Art.tallFront(ctx, e.tx * TS - camX, e.ty * TS - camY);
+    });
+
+    // butterflies
+    flies.forEach((f) => {
+      f.p += dt * 2;
+      f.x += Math.cos(f.p * 0.6) * dt * 14;
+      f.y += Math.sin(f.p * 0.9) * dt * 10;
+      const sx = Math.round(f.x) - camX, sy = Math.round(f.y + Math.sin(f.p * 3) * 2) - camY;
+      const open = Math.sin(f.p * 9) > 0;
+      ctx.fillStyle = f.c;
+      ctx.fillRect(sx - (open ? 2 : 1), sy, open ? 2 : 1, 2);
+      ctx.fillRect(sx + 1, sy, open ? 2 : 1, 2);
+      ctx.fillStyle = '#2b2140';
+      ctx.fillRect(sx, sy, 1, 2);
+    });
+
+    // drifting cloud shadows
+    ctx.fillStyle = 'rgba(30,40,90,.09)';
+    clouds.forEach((c) => {
+      c.x += c.v * dt;
+      if (c.x > MW * TS + 40) c.x = -c.w - 40;
+      const sx = Math.round(c.x) - camX, sy = c.y - camY;
+      ctx.fillRect(sx + 10, sy, c.w - 20, 6);
+      ctx.fillRect(sx, sy + 6, c.w, 14);
+      ctx.fillRect(sx + 14, sy + 20, c.w - 34, 6);
     });
   }
 
@@ -675,7 +736,7 @@
     if (document.body.dataset.view === 'game') {
       clock += dt;
       update(dt);
-      draw();
+      draw(dt);
     }
     requestAnimationFrame(loop);
   }
@@ -721,6 +782,7 @@
     $('#c-sections').innerHTML = Content.order
       .map((id) => `<section class="c-section" id="c-${id}"><h2>${Content.SECTIONS[id].title}</h2>${Content.SECTIONS[id].html()}</section>`)
       .join('');
+    $('#c-sections').querySelectorAll('[data-wmap]').forEach(WorldMap.mount);
     $('#c-nav').addEventListener('click', (e) => {
       const a = e.target.closest('[data-jump]');
       if (!a) return;

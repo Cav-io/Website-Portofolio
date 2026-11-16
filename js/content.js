@@ -168,7 +168,8 @@
 
     travel: [
       {
-        place: 'Japan',
+        place: 'Japan', lon: 138, lat: 36,
+        blurb: 'Kyoto shrines, the deer of Nara, Mt Fuji, Shibuya at night and Expo 2025 in Osaka.',
         photos: [
           ['japan-statue.jpg', 'Meeting a legend in Japan'],
           ['japan-fuji.jpg', 'Mt Fuji behind the pagoda'],
@@ -183,14 +184,16 @@
         ],
       },
       {
-        place: 'South Korea',
+        place: 'South Korea', lon: 127.5, lat: 37,
+        blurb: 'Palace courtyards and pagodas.',
         photos: [
           ['korea-palace.jpg', 'Palace courtyard'],
           ['korea-pagoda.jpg', 'Pagoda in the gardens'],
         ],
       },
       {
-        place: 'Italy',
+        place: 'Italy', lon: 11.5, lat: 43.5,
+        blurb: 'Coastlines at golden hour, harbours and one famous leaning tower.',
         photos: [
           ['italy-coast.jpg', 'Golden hour on the coast'],
           ['italy-harbour.jpg', 'Above the harbour'],
@@ -198,7 +201,8 @@
         ],
       },
       {
-        place: 'United Kingdom',
+        place: 'United Kingdom', lon: -2, lat: 53, home: true,
+        blurb: 'Home base. Lake District hikes and London sunsets.',
         photos: [
           ['lakes-crew.jpg', 'Lake District with the crew'],
           ['lakes-view.jpg', 'A rest above the lake'],
@@ -290,26 +294,9 @@
     travel: {
       title: 'Travel album',
       badge: 'PHOTO',
-      html: () =>
-        DATA.travel
-          .map(
-            (g) => `
-          <h3 class="sub">${g.place}</h3>
-          <div class="gallery">
-            ${g.photos
-              .map(
-                ([f, c]) => `
-              <figure>
-                <button type="button" class="shot" data-full="${P}${f}" data-caption="${c}">
-                  <img src="${P}${f}" alt="${c}" loading="lazy">
-                </button>
-                <figcaption>${c}</figcaption>
-              </figure>`
-              )
-              .join('')}
-          </div>`
-          )
-          .join(''),
+      html: () => `
+        <p class="wmap-intro">Hover over a place on the map (or tap it) to see the photos from there.</p>
+        <div class="wmap" data-wmap></div>`,
     },
     contact: {
       title: 'Contact',
