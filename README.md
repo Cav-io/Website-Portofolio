@@ -2,6 +2,10 @@
 
 My portfolio, built as a small top-down RPG you can play in the browser.
 
+**Play it at [cavio.uk](https://cavio.uk)**
+
+![Portfolio Town running in the console](assets/preview.jpg)
+
 You walk around a town where every building is a section of the portfolio: who I am, what I've built, where I've worked and studied, and what I do outside of code. Visit them all to collect 8 badges. If you're in a hurry there is a classic one-page view with the same content.
 
 ## Features
