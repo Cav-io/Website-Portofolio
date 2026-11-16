@@ -34,6 +34,10 @@ A file name that does not exist yet shows a "photo coming soon" placeholder, so 
 
 Use `.jpg` for photos and keep them under about 1 MB each so the site stays fast. Around 1600 pixels on the longest side is plenty.
 
+### Optional: sharper small pictures
+
+The small pictures in the travel and hobby galleries look their sharpest with a pre-shrunk copy. If you want one, save a smaller version (about 500 pixels on the longest side) with the **same file name** into `assets/photos/thumbs/`. If you skip this, the site simply uses the full picture.
+
 ## Adding something new
 
 Copy an existing block, from its `{` to its `},`, paste it where you want it in the list, and change the text. The order in the file is the order on the site.

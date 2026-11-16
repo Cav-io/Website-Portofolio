@@ -14,7 +14,7 @@
           ? `<video src="${src(m.file)}" autoplay muted loop playsinline controls></video>`
           : `<button type="button" class="shot" data-full="${src(m.file)}" data-place="${window.Content.attr(h.title)}"
                  data-caption="${window.Content.attr(m.caption)}" data-note="${window.Content.attr(m.note)}">
-               <img src="${src(m.file)}" alt="${window.Content.attr(m.caption)}" loading="lazy">
+               ${window.Content.thumb(m.file, m.caption)}
              </button>`}
         <figcaption>${m.caption || ''}</figcaption>
       </figure>`).join('');

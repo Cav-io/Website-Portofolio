@@ -136,7 +136,7 @@
         <figure>
           <button type="button" class="shot${ph.note ? ' has-note' : ''}" data-full="${C.src(ph.file)}" data-place="${C.attr(p.place)}"
               data-caption="${C.attr(ph.caption)}" data-note="${C.attr(ph.note)}">
-            <img src="${C.src(ph.file)}" alt="${C.attr(ph.caption)}" loading="lazy">
+            ${C.thumb(ph.file, ph.caption)}
           </button>
           <figcaption>${ph.caption || ''}</figcaption>
         </figure>`).join('');

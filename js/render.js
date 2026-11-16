@@ -8,19 +8,23 @@
   const PHOTOS = 'assets/photos/';
   const PLACEHOLDER = PHOTOS + 'placeholder.svg';
 
+  const attr = (t) => String(t || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
   const src = (file) => (file ? PHOTOS + file : PLACEHOLDER);
+  // Small pictures in the galleries use a pre-shrunk copy from assets/photos/thumbs/ when there is one,
+  // which looks sharper than letting the browser squash a big photo. No thumbnail? The full picture is used.
+  const thumb = (file, alt) => `<img src="${file ? PHOTOS + 'thumbs/' + file : PLACEHOLDER}" data-big="${src(file)}" alt="${attr(alt)}" loading="lazy">`;
   const img = (file, alt) => `<img src="${src(file)}" alt="${alt || ''}" loading="lazy">`;
   const tags = (list) => '<ul class="tags">' + list.map((t) => `<li>${t}</li>`).join('') + '</ul>';
   const points = (list) => '<ul class="points">' + (list || []).map((t) => `<li>${t}</li>`).join('') + '</ul>';
   const ext = (label, url) => `<a class="btn" href="${url}" target="_blank" rel="noopener">${label}</a>`;
   const joined = (...parts) => parts.filter(Boolean).join(' · ');
-  const attr = (t) => String(t || '').replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
 
   /* A picture that is missing (or not added yet) shows the placeholder instead of a broken image. */
   document.addEventListener('error', (e) => {
     const el = e.target;
     if (!el || !el.tagName || el.dataset.fallback) return;
     if (el.tagName === 'IMG') {
+      if (el.dataset.big && !el.dataset.triedBig) { el.dataset.triedBig = '1'; el.src = el.dataset.big; return; }
       el.dataset.fallback = '1';
       el.src = PLACEHOLDER;
     } else if (el.tagName === 'VIDEO') {
@@ -170,6 +174,7 @@
     SECTIONS,
     order: ['about', 'projects', 'experience', 'academy', 'hobbies', 'contact'],
     src,
+    thumb,
     attr,
     PLACEHOLDER,
   };
