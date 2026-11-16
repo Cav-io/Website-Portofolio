@@ -1,5 +1,6 @@
 # Todo List
 
+
 - [x] Add Hobbies Section - make a new branch
 - - [x] which is the parent section for travel album, animation, art, everything else
 - - [x] make  a cool design maybe boxes that expands when hovered on, then it shows the content of that hobby
@@ -23,3 +24,18 @@
 - [x] Add my C++ module which scored a 80% (unsure) where I made a zombie surival mode game, add to projects
 
 - [x] Add picture rolling down the side when hovered on, on the experience section to show further proof of experience there, open up the side to show a picture which should be easily be customisable after the "simple method to change pictures" is implemented
+
+
+- [ ] Shrink the big photos I added, japan-mt-fuji-kind-stranger.jpg is over 2 MB, keep them under 1 MB and add thumbnails for them (17/11/2026)
+
+- [ ] Phone layout pass: check the hobbies boxes, the photo viewer with its story text, and the experience photo drawers on a phone-sized screen and fix anything cramped or cut off (18/11/2026)
+
+- [ ] Add a "Copy email" button on the contact section that shows a small "Copied!" message (19/11/2026)
+
+- [ ] Add tech filter buttons above the projects in the classic view (C++, Python, JavaScript...) so an employer can show only one kind (20/11/2026)
+
+- [ ] Day and night in the game town: use the visitor's local time so evenings are darker and the lamps glow (21/11/2026)
+
+- [ ] Add a "Trainer card" style skills screen in the game showing my skills, languages and badges collected, made in the site's own pixel style (22/11/2026)
+
+- [ ] Accessibility pass: every picture has a proper description, everything can be reached with the keyboard with a visible highlight, and animations calm down for people who turn motion off (23/11/2026)
