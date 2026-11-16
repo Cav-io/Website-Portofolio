@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cavio Hossain | Portfolio Town</title>
+  <meta name="description" content="The playable portfolio of Cavio Hossain, Computer Science with AI student at the University of Nottingham. Explore the town or skip to the classic view.">
+  <meta name="theme-color" content="#2b2d6e">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' shape-rendering='crispEdges'%3E%3Crect width='16' height='16' fill='%232b2d6e'/%3E%3Crect x='3' y='2' width='10' height='6' fill='%23ff5d73'/%3E%3Crect x='3' y='8' width='10' height='6' fill='%23fbf0d4'/%3E%3Crect x='7' y='10' width='3' height='4' fill='%239a6238'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&family=Press+Start+2P&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body data-view="game">
+
+  <!-- ============ GAME VIEW ============ -->
+  <main id="game-view">
+    <header class="topbar">
+      <span class="brand">CAVIO HOSSAIN</span>
+      <button type="button" class="skip" data-go="classic">Skip the game: classic view →</button>
+    </header>
+
+    <div class="console">
+      <!-- top screen: the world -->
+      <section class="screen" id="top" aria-label="Game screen">
+        <canvas id="game" width="256" height="192"></canvas>
+
+        <div id="title" class="layer">
+          <p class="title-small">A playable portfolio</p>
+          <h1>PORTFOLIO<br>TOWN</h1>
+          <p class="title-by">starring CAVIO HOSSAIN</p>
+          <p class="blink">PRESS START</p>
+        </div>
+
+        <div id="battle" class="layer" hidden>
+          <div class="foe-box"><span id="foe-name">BUG</span><div class="bar"><i id="foe-hp"></i></div></div>
+          <canvas id="foe" width="16" height="16"></canvas>
+          <canvas id="hero" width="16" height="16"></canvas>
+          <div class="hero-box"><span>CAVIO</span><div class="bar focus"><i id="hero-hp"></i></div><small>FOCUS</small></div>
+        </div>
+
+        <div id="hint" hidden></div>
+        <div id="dialog" hidden>
+          <span id="dialog-name" hidden></span>
+          <p id="dialog-text"></p>
+          <span class="next">▼</span>
+        </div>
+        <div id="flash"></div>
+        <div id="fade"></div>
+      </section>
+
+      <div class="hinge"></div>
+
+      <!-- bottom screen: menus and touch controls -->
+      <section class="screen" id="bottom" aria-label="Menu screen">
+        <div id="title-menu" class="pane">
+          <button type="button" class="big-btn go" id="btn-start">▶ Start the game</button>
+          <button type="button" class="big-btn" data-go="classic">Classic view (no game)</button>
+          <p class="tiny">Arrow keys or WASD to move · Z to talk · X to go back</p>
+        </div>
+
+        <div id="menu" class="pane" hidden>
+          <div class="menu-head"><span>BADGES</span><span id="badge-count">0/8</span></div>
+          <div id="badges"></div>
+          <p id="objective"></p>
+          <div class="menu-actions">
+            <button type="button" data-go="classic">Classic view</button>
+            <button type="button" id="btn-sound">Sound: on</button>
+            <button type="button" id="btn-help">Controls</button>
+          </div>
+          <div id="pad" aria-label="Touch controls">
+            <div class="dpad">
+              <button type="button" data-key="up" aria-label="Up">▲</button>
+              <button type="button" data-key="left" aria-label="Left">◀</button>
+              <button type="button" data-key="right" aria-label="Right">▶</button>
+              <button type="button" data-key="down" aria-label="Down">▼</button>
+            </div>
+            <div class="ab">
+              <button type="button" data-key="b" aria-label="B, go back">B</button>
+              <button type="button" data-key="a" aria-label="A, talk">A</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="moves" class="pane" hidden>
+          <p class="moves-head">What will CAVIO do?</p>
+          <div id="move-list"></div>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- building interiors open as panels -->
+  <div id="panel" hidden role="dialog" aria-modal="true" aria-labelledby="panel-title">
+    <div class="panel-card">
+      <header>
+        <h2 id="panel-title"></h2>
+        <button type="button" id="panel-close" aria-label="Close">✕ <small>X / Esc</small></button>
+      </header>
+      <div id="panel-body" tabindex="-1"></div>
+    </div>
+  </div>
+
+  <div id="lightbox" hidden>
+    <figure><img alt=""><figcaption></figcaption></figure>
+  </div>
+
+  <!-- ============ CLASSIC VIEW ============ -->
+  <div id="classic-view">
+    <header class="c-hero">
+      <nav class="c-nav" id="c-nav"></nav>
+      <div class="c-hero-inner">
+        <img class="c-avatar" src="assets/photos/portrait.jpg" alt="Cavio Hossain">
+        <div>
+          <p class="c-kicker">Portfolio</p>
+          <h1>Cavio Hossain</h1>
+          <p class="c-tag" id="c-tag"></p>
+          <p class="links">
+            <button type="button" class="btn big" data-go="game">▶ Play the game version</button>
+            <a class="btn" id="c-mail" href="#">Email me</a>
+          </p>
+        </div>
+      </div>
+    </header>
+    <div id="c-sections"></div>
+    <footer class="c-foot">
+      <p>Built by Cavio Hossain with plain HTML, CSS and JavaScript.</p>
+    </footer>
+  </div>
+
+  <noscript>
+    <p style="padding:2rem;font-family:sans-serif;color:#fff">This portfolio is a small game and needs JavaScript. You can reach me at hossaincavio@gmail.com or linkedin.com/in/cavio.</p>
+  </noscript>
+
+  <script src="js/content.js"></script>
+  <script src="js/art.js"></script>
+  <script src="js/game.js"></script>
+</body>
+</html>
