@@ -328,7 +328,7 @@
     openId = id;
     $('#panel-title').textContent = s.title;
     $('#panel-body').innerHTML = s.html();
-    $('#panel-body').querySelectorAll('[data-wmap]').forEach(WorldMap.mount);
+    $('#panel-body').querySelectorAll('[data-hub]').forEach(Hobbies.mount);
     panel.hidden = false;
     $('#panel-body').scrollTop = 0;
     $('#panel-body').focus();
@@ -834,7 +834,7 @@
     $('#c-sections').innerHTML = Content.order
       .map((id) => `<section class="c-section" id="c-${id}"><h2>${Content.SECTIONS[id].title}</h2>${Content.SECTIONS[id].html()}</section>`)
       .join('');
-    $('#c-sections').querySelectorAll('[data-wmap]').forEach(WorldMap.mount);
+    $('#c-sections').querySelectorAll('[data-hub]').forEach(Hobbies.mount);
     $('#c-nav').addEventListener('click', (e) => {
       const a = e.target.closest('[data-jump]');
       if (!a) return;

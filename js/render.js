@@ -86,18 +86,15 @@
           ${SITE.skills.map((s) => `<div><h4>${s.group}</h4>${tags(s.items)}</div>`).join('')}
         </div>`,
     },
+    // The hobbies hub is built by js/hobbies.js. Travel lives inside it;
+    // the Photo Club in the game opens the hub straight on the travel page.
     hobbies: {
       title: 'Outside of code',
-      html: () => `
-        <div class="cards small">
-          ${SITE.hobbies.map((h) => `<article class="card"><h3>${h.title}</h3>${(h.text || []).map((t) => `<p>${t}</p>`).join('')}</article>`).join('')}
-        </div>`,
+      html: () => '<div class="hub" data-hub></div>',
     },
     travel: {
       title: 'Travel album',
-      html: () => `
-        <p class="wmap-intro">Hover over a place on the map (or tap it) to see the photos from there.</p>
-        <div class="wmap" data-wmap></div>`,
+      html: () => '<div class="hub" data-hub data-open="travel"></div>',
     },
     contact: {
       title: 'Contact',
@@ -132,7 +129,7 @@
   window.Content = {
     DATA: Object.assign({}, P, { travel: SITE.travel }),
     SECTIONS,
-    order: ['about', 'projects', 'experience', 'academy', 'hobbies', 'travel', 'contact'],
+    order: ['about', 'projects', 'experience', 'academy', 'hobbies', 'contact'],
     src,
     PLACEHOLDER,
   };
