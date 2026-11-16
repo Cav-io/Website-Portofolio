@@ -2,7 +2,7 @@
 (function () {
   'use strict';
 
-  const TS = Art.TS, CELL = Art.CELL, VW = 256, VH = 192, MW = 40, MH = 30;
+  const TS = Art.TS, VW = 256, VH = 192, MW = 40, MH = 30;
   const $ = (s) => document.querySelector(s);
   const wait = (ms) => new Promise((res) => setTimeout(res, ms));
   const touch = window.matchMedia('(pointer: coarse)').matches;
@@ -115,6 +115,19 @@
 
   /* ---------- characters ---------- */
 
+  /* Character sprites come from sheets: every character is 3 frames wide and 4 directions tall. */
+  const CW = 18, CH = 26, FACE = 64;
+  const SPR = {};
+  function loadSprites() {
+    const files = { people: 'assets/sprites/townspeople.png', player: 'assets/sprites/player.png', faces: 'assets/sprites/portraits.png' };
+    return Promise.all(Object.keys(files).map((k) => new Promise((resolve) => {
+      const im = new Image();
+      im.onload = () => { SPR[k] = im; resolve(); };
+      im.onerror = () => resolve();
+      im.src = files[k];
+    })));
+  }
+
   const DIRS = { up: [0, -1], down: [0, 1], left: [-1, 0], right: [1, 0] };
   const ROW = { down: 0, left: 1, right: 2, up: 3 };
   const OPP = { up: 'down', down: 'up', left: 'right', right: 'left' };
@@ -123,7 +136,7 @@
 
   const NPCS = [
     {
-      name: 'LUMA', x: 18, y: 25, dir: 'right', pal: ['#f15bb5', '#2ec4b6'],
+      name: 'LUMA', x: 18, y: 25, dir: 'right', sprite: [3, 1],
       lines: () => [
         'Every building in town holds part of CAVIO\'s story. Walk up to a door to go in.',
         `You have ${save.badges.length} of 8 badges. Seven come from buildings, one from the tall grass.`,
@@ -131,31 +144,31 @@
       ],
     },
     {
-      name: 'ACE', x: 10, y: 14, dir: 'down', pal: ['#2a1b1a', '#ffd23f', '#b97a52'],
+      name: 'ACE', x: 10, y: 14, dir: 'down', sprite: [0, 0],
       lines: () => ['Badminton is CAVIO\'s sport. Fast hands, faster feet.', 'CAVIO says a good rally feels like a good debugging session. You keep returning things until the other side gives up.'],
     },
     {
-      name: 'POLLY', x: 16, y: 13, dir: 'down', pal: ['#7b4a2b', '#ff9f1c'],
+      name: 'POLLY', x: 16, y: 13, dir: 'down', sprite: [2, 2],
       lines: () => ['Ciao! Hola! Hello!', 'CAVIO speaks English, Bengali and Italian natively, plus a bit of Spanish.', 'That is four human languages and about seven programming ones.'],
     },
     {
-      name: 'PIXEL', x: 23, y: 6, dir: 'down', pal: ['#8f5bd6', '#f4efe4'],
+      name: 'PIXEL', x: 23, y: 6, dir: 'down', sprite: [0, 2],
       lines: () => ['I am sketching the pond. Hold still, water.', 'CAVIO used to be an animator, and still draws digitally and edits videos.', 'You can tell. CAVIO cares how software looks and moves.'],
     },
     {
-      name: 'ROCKY', x: 35, y: 13, dir: 'left', pal: ['#4b302b', '#58ad42', '#b97a52'],
+      name: 'ROCKY', x: 35, y: 13, dir: 'left', sprite: [0, 1],
       lines: () => ['I just hiked in from the Lake District. It rained. It always rains.', 'CAVIO has travelled to Japan, South Korea and Italy. The PHOTO CLUB has the pictures.'],
     },
     {
-      name: 'STRIKER', x: 27, y: 17, dir: 'down', pal: ['#17131f', '#ff5d73', '#b97a52'],
+      name: 'STRIKER', x: 27, y: 17, dir: 'down', sprite: [3, 2],
       lines: () => ['Football fan? CAVIO works matchdays as a safety steward.', 'Tottenham, Nottingham Forest, Leyton Orient and Notts County. Four clubs, zero pitch invasions.'],
     },
     {
-      name: 'ROMMY', x: 22, y: 21, dir: 'down', pal: ['#ffd23f', '#3a86ff'],
+      name: 'ROMMY', x: 22, y: 21, dir: 'down', sprite: [3, 0],
       lines: () => ['CAVIO\'s favourite game is Pokémon Platinum. Digging through obscure ROM hacks is a close second.', 'CAVIO built a 2D RPG from scratch for A-Levels. The PROJECT LAB has a link so you can play it.', 'Yes, this whole town is a second one. Some people cannot stop.'],
     },
     {
-      name: 'MENTOR', x: 20, y: 2, dir: 'down', pal: ['#e8e4f0', '#30364d'],
+      name: 'MENTOR', x: 20, y: 2, dir: 'down', sprite: [2, 3],
       lines: () => save.badges.length >= BADGES.length
         ? ['Eight badges. You have seen everything this town has to offer.']
         : ['I guard the HALL OF FAME.', `Bring me all 8 badges. You have ${save.badges.length}.`],
@@ -173,12 +186,8 @@
 
   function setup() {
     buildMap();
-    NPCS.forEach((n) => {
-      set(n.x, n.y, T.GRASS);
-      n.sheet = Art.character(Art.npcPalette(n.pal[0], n.pal[1], n.pal[2]));
-    });
+    NPCS.forEach((n) => set(n.x, n.y, T.GRASS));
     BUILDINGS.forEach((b) => { for (let j = 0; j < 4; j++) for (let i = 0; i < 5; i++) footprint[(b.y + j) * MW + b.x + i] = 1; });
-    player.sheet = Art.character(Art.PLAYER);
     renderGround();
   }
 
@@ -225,7 +234,7 @@
     return pages;
   }
 
-  function say(lines, name) {
+  function say(lines, name, face) {
     if (typeof lines === 'string') lines = [lines];
     const pages = [];
     lines.forEach((l) => paginate(l).forEach((p) => pages.push(p)));
@@ -233,6 +242,13 @@
       Object.assign(dlg, { active: true, pages, i: 0, chars: 0, resolve });
       dlgName.hidden = !name;
       dlgName.textContent = name || '';
+      const pc = $('#portrait');
+      pc.hidden = !(face && SPR.faces);
+      if (!pc.hidden) {
+        const g = pc.getContext('2d');
+        g.clearRect(0, 0, FACE, FACE);
+        g.drawImage(SPR.faces, face[0] * FACE, face[1] * FACE, FACE, FACE, 0, 0, FACE, FACE);
+      }
       dlgText.textContent = '';
       dlgEl.hidden = false;
       sfx('blip');
@@ -247,6 +263,7 @@
     if (dlg.i >= dlg.pages.length) {
       dlg.active = false;
       dlgEl.hidden = true;
+      $('#portrait').hidden = true;
       const done = dlg.resolve;
       dlg.resolve = null;
       done();
@@ -404,8 +421,8 @@
     fg.drawImage(Art.bug(bug.c, bug.s), 0, 0);
     foe.className = '';
     const hg = $('#hero').getContext('2d');
-    hg.clearRect(0, 0, 16, 16);
-    hg.drawImage(player.sheet, 1, ROW.up * CELL + 1, TS, TS, 0, 0, TS, TS);
+    hg.clearRect(0, 0, CW, CH);
+    if (SPR.player) hg.drawImage(SPR.player, CW, ROW.up * CH, CW, CH, 0, 0, CW, CH);
     $('#foe-name').textContent = bug.name;
     $('#foe-hp').style.width = '100%';
     $('#hero-hp').style.width = '100%';
@@ -605,7 +622,7 @@
     if (n) {
       n.dir = OPP[player.dir];
       busy = true;
-      await say(n.lines(), n.name);
+      await say(n.lines(), n.name, n.sprite);
       busy = false;
       if (n.after) n.after();
       return;
@@ -686,12 +703,14 @@
   const clouds = [0, 1, 2, 3].map((i) => ({ x: i * 190 + 40, y: 60 + ((i * 137) % 360), w: 70 + ((i * 53) % 50), v: 5 + i * 1.5 }));
   const flies = [0, 1, 2, 3, 4].map((i) => ({ x: 80 + i * 110, y: 100 + ((i * 97) % 300), p: i * 1.7, c: ['#ffd23f', '#ffffff', '#f15bb5', '#8fd0ff', '#ff9f1c'][i] }));
 
-  function drawChar(sheet, dir, frame, sx, sy) {
+  function drawChar(e, sx, sy) {
     ctx.fillStyle = 'rgba(20,40,30,.3)';
     ctx.fillRect(sx + 3, sy + 13, 10, 3);
     ctx.fillRect(sx + 4, sy + 12, 8, 1);
     ctx.fillRect(sx + 4, sy + 16, 8, 1);
-    ctx.drawImage(sheet, frame * CELL, ROW[dir] * CELL, CELL, CELL, sx - 1, sy - 4, CELL, CELL);
+    if (!e.sheet) return;
+    // sheet columns are: step, stand, step
+    ctx.drawImage(e.sheet, e.ox + [1, 0, 2][e.frame] * CW, e.oy + ROW[e.dir] * CH, CW, CH, sx - 1, sy - 10, CW, CH);
   }
 
   function draw(dt) {
@@ -711,10 +730,10 @@
     ctx.drawImage(ground[(clock * 2) & 1], -camX, -camY);
 
     // everything that stands up is sorted by its feet so things overlap correctly
-    const list = NPCS.map((n) => ({ sheet: n.sheet, dir: n.dir, frame: 0, x: n.x * TS, y: n.y * TS, tx: n.x, ty: n.y }));
+    const list = NPCS.map((n) => ({ sheet: SPR.people, ox: n.sprite[0] * CW * 3, oy: n.sprite[1] * CH * 4, dir: n.dir, frame: 0, x: n.x * TS, y: n.y * TS, tx: n.x, ty: n.y }));
     if (mode !== 'title') {
       const frame = player.moving ? [1, 0, 2, 0][(player.step * 2 + (player.t > 0.5 ? 1 : 0)) % 4] : 0;
-      list.push({ sheet: player.sheet, dir: player.dir, frame, x: px, y: py, tx: Math.round(px / TS), ty: Math.round(py / TS) });
+      list.push({ sheet: SPR.player, ox: 0, oy: 0, dir: player.dir, frame, x: px, y: py, tx: Math.round(px / TS), ty: Math.round(py / TS) });
     }
     const x0 = Math.floor(camX / TS), y0 = Math.floor(camY / TS);
     for (let ty = y0; ty <= y0 + 13; ty++) {
@@ -729,7 +748,7 @@
     list.forEach((e) => {
       const sx = Math.round(e.x) - camX, sy = Math.round(e.y) - camY;
       if (e.img) { ctx.drawImage(e.img, sx, sy - e.up); return; }
-      drawChar(e.sheet, e.dir, e.frame, sx, sy);
+      drawChar(e, sx, sy);
       if (get(e.tx, e.ty) === T.TALL) Art.tallFront(ctx, e.tx * TS - camX, e.ty * TS - camY);
     });
 
@@ -790,7 +809,7 @@
           ? 'Use the D-PAD or the CIRCLE PAD to move. Press A to talk and B to go back. Hold X to run.'
           : 'Move with the ARROW KEYS or WASD. Press Z to talk and X to go back. Hold SHIFT to run. The buttons on the console work too.',
         'In a hurry? The CLASSIC VIEW button shows everything on one page.',
-      ], 'LUMA');
+      ], 'LUMA', NPCS[0].sprite);
       busy = false;
       save.intro = true;
       persist();
@@ -826,5 +845,5 @@
   buildClassic();
   if (location.hash === '#classic') setView('classic');
   window.addEventListener('hashchange', () => setView(location.hash === '#classic' ? 'classic' : 'game'));
-  requestAnimationFrame(loop);
+  loadSprites().then(() => requestAnimationFrame(loop));
 })();

@@ -302,115 +302,7 @@
     text(g, b.label, px + 3, y + 33, INK);
   }
 
-  /* ---------- characters ---------- */
-
-  const BODY = {
-    down: [
-      '................',
-      '....HHHHHHHH....',
-      '...HHhHHHHhHH...',
-      '..HHHHHhHHHHHH..',
-      '..HHHHHHHHHHHH..',
-      '..HHSSSSSSSSHH..',
-      '..HGGGGSSGGGGH..',
-      '...GwEGSSGwEG...',
-      '...SGGSSSSGGS...',
-      '....SSSssSSS....',
-      '...RRWWWWWWRR...',
-      '..RRRWWWWWWRRR..',
-      '..SRRWWWWWWRRS..',
-      '...RRPPPPPPRR...',
-    ],
-    up: [
-      '................',
-      '....HHHHHHHH....',
-      '...HHhHHHHhHH...',
-      '..HHHHHhHHHHHH..',
-      '..HHHHHHHHHHHH..',
-      '..HHHhHHHHHHHH..',
-      '..HHHHHHHhHHHH..',
-      '...HHHHHHHHHH...',
-      '...SHHHHHHHHS...',
-      '....SSSSSSSS....',
-      '...RRRRRRRRRR...',
-      '..RRRRrRRrRRRR..',
-      '..SRRRRRRRRRRS..',
-      '...RRPPPPPPRR...',
-    ],
-    left: [
-      '................',
-      '....HHHHHHHH....',
-      '...HHHhHHHHHH...',
-      '..HHHHHHHhHHHH..',
-      '..HHHHHHHHHHHH..',
-      '..SSSSSHHHHHHH..',
-      '..GGGGSSHHHHHH..',
-      '..GEwGSSSHHHH...',
-      '..SGGSSSSSHH....',
-      '...SSSSsSS......',
-      '....RRRRRRR.....',
-      '....RRRSRRR.....',
-      '....RRRSRRR.....',
-      '....RRPPPPR.....',
-    ],
-  };
-  const LEGS = {
-    front: [
-      ['....PPP..PPP....', '....BBB..BBB....'],
-      ['....PPP..PPP....', '....BBB.........'],
-      ['....PPP..PPP....', '.........BBB....'],
-    ],
-    side: [
-      ['.....PPPPP......', '.....BBBBB......'],
-      ['....PPPPPPP.....', '...BBB...BBB....'],
-      ['.....PPPP.......', '.....BBBB.......'],
-    ],
-  };
-
-  const PLAYER = {
-    H: '#2a1b1a', h: '#4b302b', S: '#b97a52', s: '#96593c', G: '#17131f', w: '#ffffff', E: '#17131f',
-    R: '#b9433f', r: '#8d302e', W: '#f4efe4', P: '#30364d', B: '#17131f',
-  };
-
-  function shade(hex, f) {
-    const n = parseInt(hex.slice(1), 16);
-    const c = (v) => Math.max(0, Math.min(255, Math.round(v * f)));
-    return 'rgb(' + c(n >> 16) + ',' + c((n >> 8) & 255) + ',' + c(n & 255) + ')';
-  }
-
-  function npcPalette(hair, shirt, skin) {
-    const sk = skin || '#e2a97c';
-    return {
-      H: hair, h: shade(hair, 1.35), S: sk, s: shade(sk, 0.82), G: sk, w: '#ffffff', E: '#17131f',
-      R: shirt, r: shade(shirt, 0.78), W: shade(shirt, 1.18), P: '#3d3558', B: '#17131f',
-    };
-  }
-
-  /* Sheet layout: rows = down, left, right, up. Columns = stand, step A, step B.
-     Each cell is 18x18 so there is room for a one-pixel outline. */
-  const CELL = 18;
-  function character(pal) {
-    const sheet = canvas(CELL * 3, CELL * 4);
-    const g = sheet.getContext('2d');
-    const dirs = ['down', 'left', 'right', 'up'];
-    dirs.forEach((dir, row) => {
-      const side = dir === 'left' || dir === 'right';
-      const body = BODY[side ? 'left' : dir];
-      for (let f = 0; f < 3; f++) {
-        const rows = body.concat(LEGS[side ? 'side' : 'front'][f]);
-        const grid = rows.map((line) => (dir === 'right' ? line.split('').reverse().join('') : line));
-        const ox = f * CELL + 1, oy = row * CELL + 1;
-        const filled = (x, y) => y >= 0 && y < 16 && x >= 0 && x < 16 && !!pal[grid[y][x]];
-        for (let y = -1; y <= 16; y++) {
-          for (let x = -1; x <= 16; x++) {
-            if (filled(x, y)) r(g, ox + x, oy + y, 1, 1, pal[grid[y][x]]);
-            else if (filled(x - 1, y) || filled(x + 1, y) || filled(x, y - 1) || filled(x, y + 1)) r(g, ox + x, oy + y, 1, 1, '#1b1320');
-          }
-        }
-      }
-    });
-    return sheet;
-  }
+  /* ---------- battle bug ---------- */
 
   const BUG = [
     '................',
@@ -438,7 +330,7 @@
   }
 
   window.Art = {
-    TS, CELL, rng, canvas, grass, flower, tall, tallFront, path, water, shadow, fence, sign, bench, mailbox,
-    treeSprite, lampSprite, building, character, bug, PLAYER, npcPalette,
+    TS, rng, canvas, grass, flower, tall, tallFront, path, water, shadow, fence, sign, bench, mailbox,
+    treeSprite, lampSprite, building, bug,
   };
 })();

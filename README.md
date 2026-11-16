@@ -6,11 +6,13 @@ You walk around a town where every building is a section of the portfolio: who I
 
 ## Features
 
-- A tile-based town drawn entirely in code on a 256×192 canvas (no image files for the world, sprites or tiles)
+- A tile-based town on a 256×192 canvas, with the tiles, buildings and props all drawn in code
+- A pixel-art handheld console and night-sky backdrop, also drawn in code
 - Grid movement, NPCs to talk to, signs to read and a typewriter dialogue system
 - Seven buildings that open the portfolio sections, each awarding a badge
 - Turn-based "bug battles" in the tall grass, with my real tech skills as the moves
-- Two-screen layout with touch controls on phones
+- Console buttons (circle pad, D-pad, A/B/X/Y, Start/Select) that work with mouse and touch
+- A world map travel album: hover a country to see the photos from there
 - Progress saved in the browser
 - A classic view for anyone who would rather just read
 
@@ -41,10 +43,17 @@ Then go to http://localhost:8000. Add `#classic` to the address to open the clas
 index.html        page structure for the game and the classic view
 css/style.css     all the styling
 js/content.js     the portfolio content (edit this to update the site)
-js/art.js         pixel art: tiles, buildings, characters, the tiny sign font
+js/art.js         pixel art: tiles, buildings, props, the tiny sign font
+js/shell.js       paints the console shell and the backdrop
+js/worldmap.js    the travel map
 js/game.js        the game: map, movement, dialogue, battles, badges
 assets/photos/    photos used in the About, Contact and Travel sections
+assets/sprites/   character sprite sheets and portraits
 ```
+
+## Credits
+
+Character sprites and portraits are from the TownsPeople2 pack on itch.io. The player sprite is a recolour of one of its characters.
 
 ## Tech
 

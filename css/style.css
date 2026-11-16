@@ -696,3 +696,41 @@ body[data-view='game'] { overflow: hidden; }
   pointer-events: none;
   background: radial-gradient(ellipse at center, transparent 62%, #1b1c4e33 100%);
 }
+
+/* ================= PIXEL-ART PASS =================
+   The shell pieces and the backdrop are painted by js/shell.js; this section
+   strips the smooth CSS effects so everything keeps hard pixel edges. */
+
+#game-view { background: #191a4a center bottom / cover no-repeat; image-rendering: pixelated; }
+.console { filter: drop-shadow(0 calc(var(--u) * 1.4) 0 #000a); }
+.lid, .base, .lid-inner, .hinge, .grill, .stick, .stick i, .dpad button, .dpad span, .abxy button, .sys button {
+  background: none center / 100% 100% no-repeat;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  image-rendering: pixelated;
+}
+.hinge { margin-top: 0; margin-bottom: 0; }
+.hinge i, .sys .led { border-radius: 0; box-shadow: none; }
+.dpad button { font-size: 0; }
+.stick i { transition: none; }
+.ctl button:active, .ctl button.down, .sys button:active, .sys button.down { background-color: transparent; filter: brightness(1.8); }
+.sys button { color: #d6d9e2; }
+
+.skip, #dialog, #dialog-name, #hint, .big-btn, .badge, .menu-actions button, .move, .foe-box, .hero-box, .bar,
+.panel-card, #panel-close, .btn, .card, .entry, .facts div, .shot, .portrait, .portrait.round, .wmap-screen,
+.wmap-pin span, .tags li, .console .screen, .c-avatar, .c-section > h2, #lightbox img { border-radius: 0; }
+
+#top::after { display: none; }
+#title { background: #1b1c4ecc; }
+.pane { background: linear-gradient(#ffffff0d 1px, transparent 1px) 0 0 / 100% 4cqw, #2b2d6e; }
+
+#portrait {
+  position: absolute;
+  right: 3cqw;
+  bottom: 29cqw;
+  width: 30cqw;
+  height: 30cqw;
+  image-rendering: pixelated;
+}
+#hero { width: 19cqw; height: 27.4cqw; left: 12.5cqw; top: 17cqw; }
