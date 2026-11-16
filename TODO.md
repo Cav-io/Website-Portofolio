@@ -26,9 +26,17 @@
 - [x] Add picture rolling down the side when hovered on, on the experience section to show further proof of experience there, open up the side to show a picture which should be easily be customisable after the "simple method to change pictures" is implemented
 
 
-- [ ] Shrink the big photos I added, japan-mt-fuji-kind-stranger.jpg is over 2 MB, keep them under 1 MB and add thumbnails for them (17/11/2026)
+### 17/11/2026 ###
 
-- [ ] Phone layout pass: check the hobbies boxes, the photo viewer with its story text, and the experience photo drawers on a phone-sized screen and fix anything cramped or cut off (18/11/2026)
+- [ ] Shrink the big photos I added, japan-mt-fuji-kind-stranger.jpg is over 2 MB, keep them under 1 MB and add thumbnails for them 
+- [ ] Add buttons to the top links of the classic view, game-style to match rest of the theme, to make it seem clickable
+- [ ] Fix the contact picure, looks blurry
+- [ ] Fix experience photos: they all should be the same size
+- [ ] Change classic view pictures, the top half uses duplicate pictures, change the first picture for linkedin picture 
+
+
+### 18/11/2026 ###
+- [ ] Phone layout pass: check the hobbies boxes, the photo viewer with its story text, and the experience photo drawers on a phone-sized screen and fix anything cramped or cut off
 
 - [ ] Add a "Copy email" button on the contact section that shows a small "Copied!" message (19/11/2026)
 
