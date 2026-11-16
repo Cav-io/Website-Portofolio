@@ -1,4 +1,3 @@
-/* EDUCATION AND SKILLS */
 window.SITE = window.SITE || {};
 
 SITE.education = [
@@ -8,6 +7,13 @@ SITE.education = [
     when: 'Sep 2024 – Jun 2027',
     where: 'Nottingham, UK',
     points: ['Average grade: 66% (2:1)'],
+  },
+  {
+    place: 'London Academy of Excellence Tottenham',
+    course: 'A-Levels: Mathematics, Computer Science and Economics',
+    when: 'Sep 2021 – Aug 2023',
+    where: 'London, UK',
+    points: [],
   },
   {
     place: 'London Metropolitan University',
@@ -21,7 +27,6 @@ SITE.education = [
   },
 ];
 
-// Each group becomes a heading with a row of tags under it.
 SITE.skills = [
   { group: 'Languages', items: ['Python', 'C++', 'JavaScript', 'HTML/CSS', 'SQL', 'Haskell', 'C'] },
   { group: 'Testing and tools', items: ['GoogleTest', 'Git', 'Jupyter', 'Excel'] },
