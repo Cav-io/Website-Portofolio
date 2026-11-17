@@ -9,24 +9,21 @@ Finished days move to the Done section at the bottom.
 - [ ] Phone layout: hobbies boxes. Done when they open and read well at 375px wide, with no sideways scrolling
 - [ ] Phone layout: photo viewer. Done when the picture and its story text both fit at 375px wide, with nothing cut off
 - [ ] Phone layout: experience photo drawers. Done when they open fully at 375px wide and don't cover the text
+- [ ] Add a "Copy email" button on the contact section. Done when clicking it copies the email and shows a small "Copied!" message
 
 ### 19/11/2026 ###
 
-- [ ] Add a "Copy email" button on the contact section. Done when clicking it copies the email and shows a small "Copied!" message
+- [ ] Add tech filter buttons above the projects in the classic view (C++, Python, JavaScript...). Done when clicking one shows only that kind, and "All" brings everything back
 
 ### 20/11/2026 ###
 
-- [ ] Add tech filter buttons above the projects in the classic view (C++, Python, JavaScript...). Done when clicking one shows only that kind, and "All" brings everything back
+- [ ] Day and night in the game town. Done when the visitor's local time makes evenings darker and the lamps glow
 
 ### 21/11/2026 ###
 
-- [ ] Day and night in the game town. Done when the visitor's local time makes evenings darker and the lamps glow
-
-### 22/11/2026 ###
-
 - [ ] Add a "Trainer card" style skills screen in the game, in the site's own pixel style. Done when it shows my skills, languages and the badges collected so far
 
-### 23/11/2026 ###
+### 22/11/2026 ###
 
 - [ ] Accessibility pass: picture descriptions. Done when every picture has a proper description
 - [ ] Accessibility pass: keyboard. Done when everything can be reached with the keyboard and has a visible highlight
