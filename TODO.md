@@ -28,11 +28,11 @@
 
 ### 17/11/2026 ###
 
-- [ ] Shrink the big photos I added, japan-mt-fuji-kind-stranger.jpg is over 2 MB, keep them under 1 MB and add thumbnails for them 
-- [ ] Add buttons to the top links of the classic view, game-style to match rest of the theme, to make it seem clickable
-- [ ] Fix the contact picure, looks blurry
-- [ ] Fix experience photos: they all should be the same size
-- [ ] Change classic view pictures, the top half uses duplicate pictures, change the first picture for linkedin picture 
+- [x] Shrink the big photos I added, japan-mt-fuji-kind-stranger.jpg is over 2 MB, keep them under 1 MB and add thumbnails for them 
+- [x] Add buttons to the top links of the classic view, game-style to match rest of the theme, to make it seem clickable
+- [x] Fix the contact picure, looks blurry
+- [x] Fix experience photos: they all should be the same size
+- [x] Change classic view pictures, the top half uses duplicate pictures, change the first picture for linkedin picture 
 
 
 ### 18/11/2026 ###

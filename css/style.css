@@ -584,9 +584,25 @@ body[data-view='game'] { overflow: hidden; }
   padding: 0 20px 44px;
   border-bottom: 4px solid var(--ink);
 }
-.c-nav { max-width: 980px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 6px 18px; padding: 16px 0; }
-.c-nav a { color: #fff; font-weight: 800; text-decoration: none; font-size: 15px; }
-.c-nav a:hover { color: var(--yellow); }
+.c-nav { max-width: 980px; margin: 0 auto; display: flex; flex-wrap: wrap; gap: 10px 12px; padding: 16px 0; }
+/* game-style buttons: pixel font, chunky border and a hard shadow that "presses" on click */
+.c-nav a {
+  font-family: var(--pixel);
+  font-size: 10px;
+  line-height: 1;
+  color: var(--ink);
+  text-decoration: none;
+  background: var(--yellow);
+  border: 3px solid var(--ink);
+  padding: 9px 12px;
+  box-shadow: 3px 3px 0 var(--ink);
+  transition: transform 0.08s steps(2), box-shadow 0.08s steps(2);
+}
+.c-nav a:nth-child(3n + 2) { background: var(--teal); }
+.c-nav a:nth-child(3n) { background: var(--pink); }
+.c-nav a:hover, .c-nav a:focus-visible { transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--ink); outline: none; }
+.c-nav a:active { transform: translate(3px, 3px); box-shadow: 0 0 0 var(--ink); }
+.c-nav a::before { content: '▸ '; }
 .c-hero-inner { max-width: 980px; margin: 24px auto 0; display: flex; align-items: center; gap: 32px; }
 .c-avatar { width: 190px; height: 190px; object-fit: cover; object-position: 50% 25%; border-radius: 50%; border: 5px solid #fff; box-shadow: 8px 8px 0 var(--coral); flex: none; }
 .c-kicker { font-family: var(--pixel); font-size: 11px; color: var(--yellow); margin: 0 0 12px; }
@@ -886,8 +902,9 @@ body[data-view='game'] { overflow: hidden; }
   border-top: 3px solid var(--ink);
 }
 .entry.has-pic:hover .entry-hint, .entry.has-pic.open .entry-hint, .entry.has-pic:focus-visible .entry-hint { visibility: hidden; }
-.entry-pic { position: relative; margin: 0; min-width: 0; overflow: hidden; border-left: 3px solid var(--ink); background: var(--night); }
-.entry-pic img { width: 100%; height: 100%; min-height: 150px; object-fit: cover; }
+/* every job photo is shown at the same size (a 4:3 frame), centred in the drawer, whatever the shape of the file */
+.entry-pic { position: relative; margin: 0; min-width: 0; overflow: hidden; border-left: 3px solid var(--ink); background: var(--night); display: flex; align-items: center; }
+.entry-pic img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; }
 .entry-pic figcaption {
   position: absolute;
   left: 0;

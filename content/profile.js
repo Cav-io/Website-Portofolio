@@ -10,8 +10,9 @@ SITE.profile = {
   linkedin: 'https://www.linkedin.com/in/cavio/',
   github: 'https://github.com/Cav-io',
 
-  photo: 'portrait.jpg',        // About section and the top of the classic view
-  contactPhoto: 'smile.jpg',    // Contact section
+  photo: 'portrait.jpg',        // About section
+  heroPhoto: 'linkedin.jpg',    // round picture at the very top of the classic view
+  contactPhoto: 'contact.jpg',  // Contact section
 
   // Each line in quotes is one paragraph of the About section.
   about: [

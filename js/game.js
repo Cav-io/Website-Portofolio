@@ -821,7 +821,7 @@
     const D = Content.DATA;
     $('#c-tag').textContent = D.tagline;
     $('#c-name').textContent = D.name;
-    $('.c-avatar').src = Content.src(D.photo);
+    $('.c-avatar').src = Content.src(D.heroPhoto || D.photo);
     $('.c-avatar').alt = D.name;
     $('#c-mail').href = 'mailto:' + D.email;
     $('#c-nav').innerHTML = Content.order.map((id) => `<a href="#c-${id}" data-jump="c-${id}">${Content.SECTIONS[id].title}</a>`).join('');
