@@ -62,6 +62,35 @@
     if (card && !e.target.closest('a')) card.classList.toggle('open');
   });
 
+  // "Copy email" button on the contact section, with a fallback for browsers without the clipboard API
+  function copyText(text) {
+    if (navigator.clipboard && window.isSecureContext) return navigator.clipboard.writeText(text);
+    return new Promise((resolve, reject) => {
+      const box = document.createElement('textarea');
+      box.value = text;
+      box.setAttribute('readonly', '');
+      box.style.cssText = 'position:fixed;opacity:0;';
+      document.body.appendChild(box);
+      box.select();
+      const ok = document.execCommand('copy');
+      box.remove();
+      ok ? resolve() : reject();
+    });
+  }
+  document.addEventListener('click', (e) => {
+    const btn = e.target.closest('[data-copy]');
+    if (!btn) return;
+    const tip = btn.querySelector('.copied');
+    copyText(btn.dataset.copy).then(
+      () => { tip.textContent = 'Copied!'; },
+      () => { tip.textContent = 'Press Ctrl+C'; }
+    ).finally(() => {
+      btn.classList.add('done');
+      clearTimeout(btn._t);
+      btn._t = setTimeout(() => btn.classList.remove('done'), 1600);
+    });
+  });
+
   const SECTIONS = {
     about: {
       title: 'About me',
@@ -122,6 +151,7 @@
             <p>${P.contactText}</p>
             <p class="links">
               <a class="btn big" href="mailto:${P.email}">${P.email}</a>
+              <button type="button" class="btn big copy-email" data-copy="${P.email}">Copy email<span class="copied" role="status" aria-live="polite"></span></button>
               ${ext('LinkedIn', P.linkedin)}
               ${ext('GitHub', P.github)}
             </p>
