@@ -931,8 +931,10 @@ body[data-view='game'] { overflow: hidden; }
   text-overflow: ellipsis;
 }
 @media (max-width: 640px) {
-  .entry.has-pic { grid-template-columns: 1fr; grid-template-rows: auto 0px; transition: grid-template-rows 0.28s steps(7); }
-  .entry.has-pic:hover, .entry.has-pic:focus-visible, .entry.has-pic.open { grid-template-columns: 1fr; grid-template-rows: auto 190px; }
-  .entry-pic { border-left: 0; border-top: 3px solid var(--ink); }
+  /* the drawer rolls down under the text and opens to the photo's full height (0fr to 1fr), so nothing is cropped */
+  .entry.has-pic { grid-template-columns: 1fr; grid-template-rows: auto 0fr; transition: grid-template-rows 0.28s steps(7); }
+  .entry.has-pic:hover, .entry.has-pic:focus-visible, .entry.has-pic.open { grid-template-columns: 1fr; grid-template-rows: auto 1fr; }
+  .entry-pic { border-left: 0; border-top: 3px solid var(--ink); min-height: 0; }
+  .entry-pic figcaption { white-space: normal; }
 }
 @media (prefers-reduced-motion: reduce) { .entry.has-pic { transition: none; } }
