@@ -854,6 +854,7 @@
   function setView(v) {
     if (v !== 'game') setFs(false);
     document.body.dataset.view = v;
+    if (v === 'game') onTurn();
     held.length = 0;
     try { history.replaceState(null, '', v === 'classic' ? '#classic' : location.pathname + location.search); } catch (e) { /* file:// */ }
     window.scrollTo(0, 0);
