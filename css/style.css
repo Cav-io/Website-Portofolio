@@ -660,6 +660,8 @@ body[data-view='game'] { overflow: hidden; }
   animation: pin 1s steps(2) infinite;
 }
 .wmap-pin.home { background: var(--blue); }
+/* a bigger invisible tap area around each pin on touch screens */
+@media (pointer: coarse) { .wmap-pin::before { content: ''; position: absolute; inset: -11px; } }
 .wmap-pin span {
   position: absolute;
   left: 50%;
