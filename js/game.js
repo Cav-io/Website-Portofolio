@@ -521,12 +521,12 @@
   }
 
   function glow(k, on) {
-    document.querySelectorAll('.console [data-key="' + k + '"]').forEach((el) => el.classList.toggle('down', on));
+    document.querySelectorAll('.console [data-key="' + k + '"], #fs-pad [data-key="' + k + '"]').forEach((el) => el.classList.toggle('down', on));
   }
 
-  /* the circle pad: drag it in a direction to walk */
-  (function () {
-    const stick = $('#stick'), knob = stick.querySelector('i');
+  /* the circle pads (console and full screen): drag one in a direction to walk */
+  ['#stick', '#fs-stick'].forEach((sel) => {
+    const stick = $(sel), knob = stick.querySelector('i');
     let dir = null;
     const set = (d, dx, dy) => {
       if (d !== dir) { if (dir) release(dir); dir = d; if (d) press(d); }
@@ -542,7 +542,7 @@
     stick.addEventListener('pointerdown', (e) => { e.preventDefault(); stick.setPointerCapture(e.pointerId); move(e); });
     stick.addEventListener('pointermove', (e) => { if (stick.hasPointerCapture(e.pointerId)) move(e); });
     ['pointerup', 'pointercancel'].forEach((t) => stick.addEventListener(t, () => set(null, 0, 0)));
-  })();
+  });
 
   window.addEventListener('keydown', (e) => {
     if (document.body.dataset.view !== 'game') return;
@@ -567,7 +567,7 @@
   });
   window.addEventListener('blur', () => { held.length = 0; run = false; });
 
-  document.querySelectorAll('.console [data-key]').forEach((btn) => {
+  document.querySelectorAll('.console [data-key], #fs-pad [data-key]').forEach((btn) => {
     const k = btn.dataset.key;
     const up = () => { btn.classList.remove('down'); release(k); };
     btn.addEventListener('pointerdown', (e) => { e.preventDefault(); btn.classList.add('down'); press(k); });
@@ -598,6 +598,40 @@
     }
   });
   $('#btn-start').addEventListener('click', () => start());
+
+  /* full screen on phones: only the game screen, with see-through controls on top */
+  let realFs = false;
+  function setFs(on) {
+    if (document.body.classList.contains('fs') === on) return;
+    document.body.classList.toggle('fs', on);
+    $('#fs-pad').hidden = !on;
+    held.length = 0;
+    run = false;
+    const root = document.documentElement;
+    const req = root.requestFullscreen || root.webkitRequestFullscreen;
+    const fsEl = () => document.fullscreenElement || document.webkitFullscreenElement;
+    if (on) {
+      window.scrollTo(0, 0);
+      // phones without the fullscreen API (iPhone) still get the full-window layout
+      if (req && !fsEl()) {
+        try {
+          const p = req.call(root);
+          if (p && p.then) p.then(() => { realFs = true; }, () => {});
+          else realFs = true;
+        } catch (e) { /* not allowed here */ }
+      }
+      if (mode === 'title') start();
+    } else if (realFs && fsEl()) {
+      realFs = false;
+      (document.exitFullscreen || document.webkitExitFullscreen).call(document);
+    }
+  }
+  // leaving the browser's full screen (back gesture, swipe) also leaves the layout
+  ['fullscreenchange', 'webkitfullscreenchange'].forEach((t) => document.addEventListener(t, () => {
+    if (!document.fullscreenElement && !document.webkitFullscreenElement && realFs) { realFs = false; setFs(false); }
+  }));
+  document.querySelectorAll('[data-fs]').forEach((b) => b.addEventListener('click', () => setFs(true)));
+  $('#fs-exit').addEventListener('click', () => setFs(false));
   $('#btn-sound').addEventListener('click', () => { save.sound = !save.sound; persist(); renderMenu(); sfx('blip'); });
   $('#btn-help').addEventListener('click', () => {
     if (mode === 'world' && !busy && !dlg.active) say(['Move: ARROW KEYS or WASD. Hold SHIFT to run.', 'Z or ENTER: talk, read and confirm. X or ESC: go back.', 'Walk up into a door to enter a building.']);
@@ -811,6 +845,7 @@
   }
 
   function setView(v) {
+    if (v !== 'game') setFs(false);
     document.body.dataset.view = v;
     held.length = 0;
     try { history.replaceState(null, '', v === 'classic' ? '#classic' : location.pathname + location.search); } catch (e) { /* file:// */ }
