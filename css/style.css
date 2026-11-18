@@ -260,10 +260,16 @@ body.fs #bottom:has(#moves:not([hidden])) {
   bottom: 12px;
   transform: translateX(-50%);
   margin: 0;
-  width: min(44vw, calc(52dvh * 4 / 3));
+  /* a wide, short strip along the bottom of the game, below the hero's health box */
+  aspect-ratio: auto;
+  width: min(50vw, 400px, calc(100dvh * 4 / 3 - 24px));
+  height: 140px;
+}
+@media (orientation: landscape) {
+  body.fs #moves .moves-head, body.fs #moves .move small { display: none; }
 }
 @media (orientation: portrait) {
-  body.fs #bottom:has(#moves:not([hidden])) { bottom: auto; top: calc(100vw * 0.75 + 24px); width: min(80vw, 340px); }
+  body.fs #bottom:has(#moves:not([hidden])) { bottom: auto; top: calc(100vw * 0.75 + 24px); width: min(80vw, 340px); height: auto; aspect-ratio: 4 / 3; }
 }
 
 #fs-pad { position: fixed; inset: 0; z-index: 15; pointer-events: none; }
@@ -634,7 +640,8 @@ body.fs #bottom:has(#moves:not([hidden])) {
 .btn.big { background: var(--yellow); font-size: 16px; padding: 9px 16px; }
 .btn:hover, .btn:focus-visible { transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--ink); background: var(--teal); outline: none; }
 button.btn { font-family: inherit; cursor: pointer; }
-.copy-email { position: relative; background: #fff; }
+.btn.big.copy-email { position: relative; background: #fff; }
+.btn.big.copy-email:hover, .btn.big.copy-email:focus-visible { background: var(--teal); }
 /* small pixel speech bubble that pops up above the button after copying */
 .copy-email .copied {
   position: absolute;
