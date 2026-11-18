@@ -7,7 +7,7 @@ Finished days move to the Done section at the bottom.
 ### 18/11/2026 ###
 
 - [x] Phone layout: hobbies boxes. Done when they open and read well at 375px wide, with no sideways scrolling
-- [ ] Phone layout: photo viewer. Done when the picture and its story text both fit at 375px wide, with nothing cut off
+- [x] Phone layout: photo viewer. Done when the picture and its story text both fit at 375px wide, with nothing cut off
 - [ ] Phone layout: experience photo drawers. Done when they open fully at 375px wide and don't cover the text
 - [ ] Add a "Copy email" button on the contact section. Done when clicking it copies the email and shows a small "Copied!" message
 - [ ] Phone: fullscreen game. Done when tapping a button plays the game fullscreen, with see-through on-screen buttons and a joystick

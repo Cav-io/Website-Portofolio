@@ -876,9 +876,18 @@ body[data-view='game'] { overflow: hidden; }
   border-top: 3px solid var(--ink);
 }
 
+.viewer .hint-touch { display: none; }
+@media (pointer: coarse) {
+  .viewer .hint-touch { display: inline; }
+  .viewer .hint-mouse { display: none; }
+}
 @media (max-width: 760px) {
-  #lightbox.has-note .viewer { grid-template-columns: 1fr; overflow-y: auto; }
-  #lightbox.has-note .viewer img { max-height: 50dvh; }
+  /* on a phone the picture sits on top and the whole card scrolls as one, so the story never scrolls inside a scroll */
+  #lightbox.has-note .viewer { grid-template-columns: 1fr; overflow-y: auto; overscroll-behavior: contain; }
+  #lightbox.has-note .viewer img { max-height: 44dvh; }
+  #lightbox.has-note .viewer aside { overflow: visible; padding: 16px 16px 18px; }
+  .viewer h3 { font-size: 12px; }
+  .viewer-note { font-size: 10px; line-height: 2.1; }
 }
 
 /* ================= EXPERIENCE PHOTO DRAWER ================= */
