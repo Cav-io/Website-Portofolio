@@ -11,6 +11,7 @@ Finished days move to the Done section at the bottom.
 - [x] Phone layout: experience photo drawers. Done when they open fully at 375px wide and don't cover the text
 - [x] Add a "Copy email" button on the contact section. Done when clicking it copies the email and shows a small "Copied!" message
 - [x] Phone: fullscreen game. Done when tapping a button plays the game fullscreen, with see-through on-screen buttons and a joystick
+- [x] Phone: turning the phone sideways switches to full screen on its own
 
 ### 19/11/2026 ###
 

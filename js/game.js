@@ -632,6 +632,13 @@
   }));
   document.querySelectorAll('[data-fs]').forEach((b) => b.addEventListener('click', () => setFs(true)));
   $('#fs-exit').addEventListener('click', () => setFs(false));
+  // turning a phone sideways on the game jumps straight into full screen
+  const sideways = window.matchMedia('(orientation: landscape) and (pointer: coarse)');
+  const onTurn = () => {
+    if (sideways.matches && document.body.dataset.view === 'game' && $('#panel').hidden && $('#lightbox').hidden) setFs(true);
+  };
+  if (sideways.addEventListener) sideways.addEventListener('change', onTurn);
+  else if (sideways.addListener) sideways.addListener(onTurn);
   $('#btn-sound').addEventListener('click', () => { save.sound = !save.sound; persist(); renderMenu(); sfx('blip'); });
   $('#btn-help').addEventListener('click', () => {
     if (mode === 'world' && !busy && !dlg.active) say(['Move: ARROW KEYS or WASD. Hold SHIFT to run.', 'Z or ENTER: talk, read and confirm. X or ESC: go back.', 'Walk up into a door to enter a building.']);
